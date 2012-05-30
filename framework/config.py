@@ -29,11 +29,17 @@ class Config():
         
         """
         try:
-            c = open(os.path.dirname(__file__) + "/../config.yaml")
-        except Exception:
-            c = open(os.path.dirname(__file__) + "/config.yaml")
+            try:
+                c = open(os.path.dirname(__file__) + "/../config.yaml")
+            except Exception:
+                c = open(os.path.dirname(__file__) + "/config.yaml")
 
-        self.data = yaml.load(c)           
+            self.data = yaml.load(c)
+        
+        # If there is no config file, or it cannot be opened, use the local 
+        # environment variables as data.
+        except Exception:
+            self.data = environ.copy()
     
     @classmethod
     def get(self, key):
